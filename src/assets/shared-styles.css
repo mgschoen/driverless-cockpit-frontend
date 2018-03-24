@@ -1,0 +1,7 @@
+:root {
+  --app-primary-color: rgba(50,50,50,1);
+  --app-background-color: rgba(204,204,204,1);
+  --app-lighttext-color: rgba(255,255,255,1);
+  --app-highlight-color: rgba(190,22,33,1);
+  --app-highlight-dark-color: rgb(66, 9, 11);
+}
