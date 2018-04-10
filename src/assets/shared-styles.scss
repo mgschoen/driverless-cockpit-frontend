@@ -1,0 +1,40 @@
+:root {
+  --app-primary-color: rgba(50,50,50,1);
+  --app-primary-light-color: rgba(100,100,100,1);
+  --app-background-color: rgba(204,204,204,1);
+  --app-lighttext-color: rgba(255,255,255,1);
+  --app-highlight-color: rgba(190,22,33,1);
+  --app-highlight-dark-color: rgb(66, 9, 11);
+}
+
+code {
+  color: var(--app-highlight-color);
+}
+
+button{
+
+  &.btn-primary {
+    background-color: var(--app-highlight-color);
+    border-color: var(--app-highlight-color);
+  }
+
+  &.btn-secondary {
+    background-color: var(--app-primary-color);
+    border-color: var(--app-primary-color);
+
+    &:hover,
+    &:disabled,
+    &.disabled,
+    &:not(:disabled):not(.disabled):active,
+    &:not(:disabled):not(.disabled).active {
+      background-color: var(--app-primary-light-color);
+      border-color: var(--app-primary-light-color);
+    }
+  }
+}
+
+/* Indent an inline element as if it were inside a b-button */
+.button-indent {
+  display: block;
+  margin: 8px 13px;
+}

@@ -28,7 +28,7 @@
 
     </b-navbar>
 
-    <b-container fluid>
+    <b-container>
 
       <router-view/>
 
@@ -53,9 +53,14 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: var(--app-primary-color);
 }
+/* Used for <b-navbar variant="fsd"> */
 .bg-fsd {
   background-color: var(--app-primary-color);
+}
+/* Used for <b-container> */
+.container {
+  margin-top: 20px;
 }
 </style>
