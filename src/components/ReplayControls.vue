@@ -2,7 +2,7 @@
   <div>
     <b-row>
       <b-col sm="auto">
-        <p>Replay clip: <code>{{clipName}}</code></p>
+        <p>Replay clip: <code>{{clipID}}</code></p>
       </b-col>
     </b-row>
     <b-row align-h="start">
@@ -55,14 +55,12 @@
 
 <script>
 import vueSlider from 'vue-slider-component'
-import util from '@/shared/util.js'
+import Util from '@/shared/util.js'
 
 export default {
   name: 'ReplayControls',
-  components: {
-    vueSlider
-  },
   props: {
+    clipID: String,
     clipName: String,
     clipLength: Number
   },
@@ -85,12 +83,7 @@ export default {
   },
   computed: {
     counterValue: function () {
-      let minutes = Math.floor(this.position / 60000)
-      let seconds = Math.floor((this.position % 60000) / 1000)
-      let msecs = this.position % 1000
-      return util.padZeros(2, minutes) + ':' +
-             util.padZeros(2, seconds) + ':' +
-             util.padZeros(3, msecs)
+      return Util.timerFormat(this.position)
     }
   },
   methods: {
@@ -110,6 +103,9 @@ export default {
         this.position = 0
       }
     }
+  },
+  components: {
+    vueSlider
   }
 }
 </script>

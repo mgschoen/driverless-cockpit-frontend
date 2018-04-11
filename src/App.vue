@@ -10,17 +10,16 @@
       <b-collapse is-nav id="navbarCollapse">
 
         <b-navbar-nav>
-          <b-nav-item to="/dashboard" :active="$route.name === 'dashboard'">
-            Live
-          </b-nav-item>
-          <b-nav-item to="/recordings" :active="$route.name === 'recordings'">
-            Recordings
+          <b-nav-item to="/recordings">
+            <b-button variant="primary" size="sm">
+              <img src="@/assets/play-white.svg" width="10" class="replay-icon"> Replay
+            </b-button>
           </b-nav-item>
         </b-navbar-nav>
 
         <b-navbar-nav class="ml-auto">
           <b-nav-item>
-            <connected-status active/>
+            <connected-status :active="appState.connected"/>
           </b-nav-item>
         </b-navbar-nav>
 
@@ -38,9 +37,38 @@
 
 <script>
 import ConnectedStatus from '@/components/ConnectedStatus'
+import Util from '@/shared/util.js'
 
 export default {
   name: 'App',
+  data () {
+    return {
+      apiRoot: process.env.FSD_API_ROOT,
+      requiredProperties: ['connected', 'recording'],
+      appState: {
+        connected: false,
+        recording: false
+      }
+    }
+  },
+  mounted: function () {
+    this.updateAppState()
+  },
+  methods: {
+    updateAppState: function () {
+      this.$http.get(this.apiRoot + 'appstate').then(response => {
+        let responseBody = response.body
+        let responseValidation = Util.validateObjectSchema(responseBody, this.requiredProperties)
+        if (responseValidation.valid) {
+          this.appState = responseBody
+        } else {
+          throw new Error('Missing properties: ' + responseValidation.missing.toString())
+        }
+      }, error => {
+        console.log(error)
+      })
+    }
+  },
   components: {
     ConnectedStatus
   }
@@ -62,5 +90,8 @@ export default {
 /* Used for <b-container> */
 .container {
   margin-top: 20px;
+}
+.replay-icon {
+  margin-bottom: 4px;
 }
 </style>

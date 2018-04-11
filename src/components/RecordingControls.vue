@@ -1,7 +1,7 @@
 <template>
   <b-row align-h="end">
     <b-col cols="auto" class="pr-0" v-if="recording">
-      <code class="button-indent">00:00:000</code>
+      <code class="button-indent">{{counterValue}}</code>
     </b-col>
     <b-col cols="auto">
       <b-button-group>
@@ -21,11 +21,19 @@
 </template>
 
 <script>
+import Util from '@/shared/util.js'
+
 export default {
   name: 'RecordingControls',
   data () {
     return {
-      recording: false
+      recording: false,
+      clipPosition: 0
+    }
+  },
+  computed: {
+    counterValue: function () {
+      return Util.timerFormat(this.clipPosition)
     }
   },
   methods: {

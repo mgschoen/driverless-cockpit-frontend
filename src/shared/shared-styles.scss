@@ -14,8 +14,15 @@ code {
 button{
 
   &.btn-primary {
-    background-color: var(--app-highlight-color);
+    background-color: rgba(0,0,0,0);
     border-color: var(--app-highlight-color);
+
+    &:hover,
+    &:focus,
+    &:active {
+      background-color: var(--app-highlight-color);
+      border-color: var(--app-highlight-color);
+    }
   }
 
   &.btn-secondary {

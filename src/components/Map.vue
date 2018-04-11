@@ -1,10 +1,14 @@
 <template>
-  <div id="mapWrapper"></div>
+  <b-row>
+    <b-col>
+      <div id="mapWrapper"></div>
+    </b-col>
+  </b-row>
 </template>
 
 <script>
 export default {
-  is: 'Map',
+  name: 'Map',
   data () {
     return {}
   }
