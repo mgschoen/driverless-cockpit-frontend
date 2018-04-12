@@ -19,7 +19,14 @@
 
         <b-navbar-nav class="ml-auto">
           <b-nav-item>
-            <connected-status :active="appState.connected"/>
+            <status-light label="Recording"
+                          :active="appState.recording"
+                          color="rgba(190,22,33,1)"></status-light>
+          </b-nav-item>
+          <b-nav-item>
+            <status-light label="Connected"
+                          :active="appState.connected"
+                          color="lightgreen"/>
           </b-nav-item>
         </b-navbar-nav>
 
@@ -36,41 +43,22 @@
 </template>
 
 <script>
-import ConnectedStatus from '@/components/ConnectedStatus'
-import Util from '@/shared/util.js'
+import { mapState } from 'vuex'
+import StatusLight from '@/components/StatusLight'
 
 export default {
   name: 'App',
   data () {
-    return {
-      apiRoot: process.env.FSD_API_ROOT,
-      requiredProperties: ['connected', 'recording'],
-      appState: {
-        connected: false,
-        recording: false
-      }
-    }
+    return {}
   },
-  mounted: function () {
-    this.updateAppState()
-  },
-  methods: {
-    updateAppState: function () {
-      this.$http.get(this.apiRoot + 'appstate').then(response => {
-        let responseBody = response.body
-        let responseValidation = Util.validateObjectSchema(responseBody, this.requiredProperties)
-        if (responseValidation.valid) {
-          this.appState = responseBody
-        } else {
-          throw new Error('Missing properties: ' + responseValidation.missing.toString())
-        }
-      }, error => {
-        console.log(error)
-      })
-    }
+  computed: mapState({
+    appState: 'appState'
+  }),
+  created: function () {
+    this.$store.dispatch('startRefreshingEntity', 'appState')
   },
   components: {
-    ConnectedStatus
+    StatusLight
   }
 }
 </script>

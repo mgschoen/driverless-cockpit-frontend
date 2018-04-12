@@ -1,17 +1,17 @@
 <template>
   <b-row align-h="end">
-    <b-col cols="auto" class="pr-0" v-if="recording">
+    <b-col cols="auto" class="pr-0" v-if="appState.recording">
       <code class="button-indent">{{counterValue}}</code>
     </b-col>
     <b-col cols="auto">
       <b-button-group>
         <!-- stop button -->
-        <b-button :disabled="!recording"
+        <b-button :disabled="!appState.recording"
                   @click="stop">
           <span class="panelIcon stop"></span>
         </b-button>
         <!-- record button -->
-        <b-button :pressed="recording"
+        <b-button :pressed="appState.recording"
                   @click="record">
           <span class="panelIcon record"></span>
         </b-button>
@@ -21,21 +21,22 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import Util from '@/shared/util.js'
 
 export default {
   name: 'RecordingControls',
   data () {
     return {
-      recording: false,
       clipPosition: 0
     }
   },
-  computed: {
+  computed: mapState({
+    appState: 'appState',
     counterValue: function () {
       return Util.timerFormat(this.clipPosition)
     }
-  },
+  }),
   methods: {
     record: function () {
       if (!this.recording) {

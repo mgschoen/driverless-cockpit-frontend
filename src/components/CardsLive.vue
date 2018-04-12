@@ -3,10 +3,7 @@
     <b-card-group columns>
       <b-card title="Live stats">
         <p class="card-text">
-          <code>
-            We are the live cards
-            {{liveStats}}
-          </code>
+          <pre>{{liveStatsFiltered}}</pre>
         </p>
       </b-card>
     </b-card-group>
@@ -14,13 +11,25 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'CardsLive',
-  props: {
-    liveStats: Object
-  },
   data () {
     return {}
-  }
+  },
+  computed: mapState({
+    liveStats: 'liveStats',
+    liveStatsFiltered () {
+      let originalObject = this.liveStats
+      let filteredObject = {}
+      for (var key in originalObject) {
+        if (originalObject.requiredProperties.indexOf(key) >= 0) {
+          filteredObject[key] = originalObject[key]
+        }
+      }
+      return filteredObject
+    }
+  })
 }
 </script>

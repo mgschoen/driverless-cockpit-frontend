@@ -60,9 +60,7 @@ import Util from '@/shared/util.js'
 export default {
   name: 'ReplayControls',
   props: {
-    clipID: String,
-    clipName: String,
-    clipLength: Number
+    clipID: String
   },
   data () {
     return {
@@ -77,7 +75,7 @@ export default {
           backgroundColor: 'rgba(50,50,50,1)',
           borderColor: 'rgba(50,50,50,1)'
         },
-        max: this.clipLength
+        max: 80000
       }
     }
   },
