@@ -27,25 +27,36 @@ import Util from '@/shared/util.js'
 export default {
   name: 'RecordingControls',
   data () {
-    return {
-      clipPosition: 0
-    }
+    return {}
   },
   computed: mapState({
     appState: 'appState',
+    clipPosition: function () {
+      if (this.appState && this.appState.recording) {
+        let now = new Date().getTime()
+        return now - this.appState.activeRecording.start
+      }
+      return 0
+    },
     counterValue: function () {
       return Util.timerFormat(this.clipPosition)
     }
   }),
   methods: {
     record: function () {
-      if (!this.recording) {
-        this.recording = true
+      if (!this.appState.recording) {
+        this.$store.dispatch('switchRecordingStatus', 'start').then(null, error => {
+          console.log(error)
+        })
       }
     },
     stop: function () {
-      if (this.recording) {
-        this.recording = false
+      if (this.appState.recording) {
+        this.$store.dispatch('switchRecordingStatus', 'stop').then(_ => {
+          this.$router.push('/recordings')
+        }, error => {
+          console.log(error)
+        })
       }
     }
   }

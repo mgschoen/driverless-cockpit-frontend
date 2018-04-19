@@ -4,14 +4,15 @@
   --app-background-color: rgba(204,204,204,1);
   --app-lighttext-color: rgba(255,255,255,1);
   --app-highlight-color: rgba(190,22,33,1);
-  --app-highlight-dark-color: rgb(66, 9, 11);
+  --app-highlight-medium-color: rgb(131, 9, 11);
+  --app-highlight-dark-color: rgba(66, 9, 11, 1);
 }
 
 code {
   color: var(--app-highlight-color);
 }
 
-button{
+a, button{
 
   &.btn-primary {
     background-color: rgba(0,0,0,0);

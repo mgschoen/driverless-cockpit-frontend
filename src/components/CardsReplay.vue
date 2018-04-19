@@ -1,10 +1,10 @@
 <template>
   <b-row>
     <b-card-group columns>
-      <b-card title="Live stats">
+      <b-card title="Stats">
         <p class="card-text">
           <code>
-            We are the replay cards
+            {{replayGlobals.activeFrame}}
           </code>
         </p>
       </b-card>
@@ -13,10 +13,15 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'CardsReplay',
   data () {
     return {}
-  }
+  },
+  computed: mapState({
+    replayGlobals: 'replay'
+  })
 }
 </script>

@@ -25,8 +25,17 @@ export default {
   computed: mapState({
     liveStats: 'liveStats'
   }),
+  watch: {
+    $route (to, from) {
+      if (to.path.split('/').indexOf('live') >= 0) {
+        this.$store.dispatch('startRefreshingEntity', 'liveStats')
+      }
+    }
+  },
   created: function () {
-    this.$store.dispatch('startRefreshingEntity', 'liveStats')
+    if (this.$route.path.split('/').indexOf('live') >= 0) {
+      this.$store.dispatch('startRefreshingEntity', 'liveStats')
+    }
   },
   destroyed: function () {
     this.$store.dispatch('stopRefreshingEntity', 'liveStats')

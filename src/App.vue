@@ -18,7 +18,7 @@
         </b-navbar-nav>
 
         <b-navbar-nav class="ml-auto">
-          <b-nav-item>
+          <b-nav-item to="/dashboard/live">
             <status-light label="Recording"
                           :active="appState.recording"
                           color="rgba(190,22,33,1)"></status-light>
@@ -39,6 +39,16 @@
       <router-view/>
 
     </b-container>
+
+    <b-modal ref="globalLoader"
+             v-model="globalLoader.show"
+             no-close-on-esc
+             no-close-on-backdrop
+             hide-header-close>
+      <div slot="modal-header"></div>
+      <h3>{{globalLoader.message}}</h3>
+      <div slot="modal-footer"></div>
+    </b-modal>
   </div>
 </template>
 
@@ -52,7 +62,8 @@ export default {
     return {}
   },
   computed: mapState({
-    appState: 'appState'
+    appState: 'appState',
+    globalLoader: 'globalLoader'
   }),
   created: function () {
     this.$store.dispatch('startRefreshingEntity', 'appState')

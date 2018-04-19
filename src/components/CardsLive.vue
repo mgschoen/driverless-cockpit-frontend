@@ -12,6 +12,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import StoreUtil from '@/store/store-util'
 
 export default {
   name: 'CardsLive',
@@ -21,10 +22,11 @@ export default {
   computed: mapState({
     liveStats: 'liveStats',
     liveStatsFiltered () {
+      let requiredProperties = StoreUtil.getConfigFromIdentifier('liveStats').requiredProperties
       let originalObject = this.liveStats
       let filteredObject = {}
       for (var key in originalObject) {
-        if (originalObject.requiredProperties.indexOf(key) >= 0) {
+        if (requiredProperties.indexOf(key) >= 0) {
           filteredObject[key] = originalObject[key]
         }
       }

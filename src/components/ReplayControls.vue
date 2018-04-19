@@ -11,12 +11,12 @@
       <b-col order="0" cols="auto">
         <b-button-group>
           <!-- play button -->
-          <b-button :pressed="playing"
+          <b-button :pressed="replayGlobals.mode === 'playing'"
                     @click="play">
             <img src="@/assets/play.svg">
           </b-button>
           <!-- pause button -->
-          <b-button :disabled="!playing"
+          <b-button :disabled="replayGlobals.mode !== 'playing'"
                     @click="pause">
             <span class="panelIcon pause"></span>
           </b-button>
@@ -45,7 +45,7 @@
 
       <!-- Close button -->
       <b-col order="2" order-sm="3" cols="3" sm="auto" class="pl-0">
-        <b-button @click="$emit('reset-clip')">
+        <b-button variant="secondary" to="/dashboard/live">
           <img src="@/assets/x.svg">
         </b-button>
       </b-col>
@@ -54,6 +54,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import vueSlider from 'vue-slider-component'
 import Util from '@/shared/util.js'
 
@@ -64,7 +65,7 @@ export default {
   },
   data () {
     return {
-      playing: false,
+      lastTickAt: 0,
       position: 0,
       sliderOptions: {
         tooltip: 'hover',
@@ -75,30 +76,72 @@ export default {
           backgroundColor: 'rgba(50,50,50,1)',
           borderColor: 'rgba(50,50,50,1)'
         },
-        max: 80000
+        max: 100
       }
     }
   },
-  computed: {
+  computed: mapState({
+    replayGlobals: 'replay',
     counterValue: function () {
       return Util.timerFormat(this.position)
     }
+  }),
+  watch: {
+    position: function (newPosition) {
+      this.$store.commit('updateReplayRecordingActiveFrame', newPosition)
+    }
+  },
+  mounted () {
+    this.$store.commit('updateGlobalLoader', {show: true, message: 'Loading clip...'})
+    this.position = 0
+    this.$store.dispatch('fetchReplayRecording', this.clipID).then(_ => {
+      let recording = this.replayGlobals.selectedRecording
+      this.sliderOptions.max = recording.end - recording.start
+      this.$store.commit('updateReplayRecordingActiveFrame', this.position)
+      this.$store.commit('updateGlobalLoader', {show: false, message: ''})
+    }, error => {
+      console.log(error)
+    })
   },
   methods: {
+    playTick: function () {
+      switch (this.replayGlobals.mode) {
+        case 'playing':
+          let now = new Date().getTime()
+          let timeElapsed = this.lastTickAt ? now - this.lastTickAt : 0
+          if (timeElapsed < (this.sliderOptions.max - this.position)) {
+            this.position += timeElapsed
+            this.lastTickAt = now
+            window.setTimeout(this.playTick, 100)
+          } else {
+            this.pause()
+            this.position = this.sliderOptions.max
+          }
+          break
+        case 'paused':
+          this.lastTickAt = 0
+          break
+        case 'stopped':
+        default:
+          // do nothing
+      }
+    },
     play: function () {
-      if (!this.playing) {
-        this.playing = true
+      if (this.replayGlobals.mode !== 'playing') {
+        this.$store.commit('updateReplayMode', 'playing')
+        this.playTick()
       }
     },
     pause: function () {
-      if (this.playing) {
-        this.playing = false
+      if (this.replayGlobals.mode === 'playing') {
+        this.$store.commit('updateReplayMode', 'paused')
       }
     },
     stop: function () {
       if (this.position !== 0) {
-        this.playing = false
+        this.$store.commit('updateReplayMode', 'stopped')
         this.position = 0
+        this.lastTickAt = 0
       }
     }
   },
