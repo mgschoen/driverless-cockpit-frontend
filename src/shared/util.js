@@ -1,3 +1,5 @@
+const PX_PER_METER = 20
+
 module.exports = {
   /**
    * If `string` has less than `numChars` characters, prefix it with the matching number of zeros
@@ -43,5 +45,8 @@ module.exports = {
         missing: missing
       }
     }
+  },
+  meterToPixels: function (m) {
+    return Math.round(m * PX_PER_METER)
   }
 }

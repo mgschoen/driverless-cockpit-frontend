@@ -1,12 +1,12 @@
 <template>
   <b-row>
-    <b-card-group columns>
+    <b-col md="6" lg="4">
       <b-card title="Live stats">
         <p class="card-text">
-          <pre>{{liveStatsFiltered}}</pre>
+        <pre>{{liveStatsFiltered}}</pre>
         </p>
       </b-card>
-    </b-card-group>
+    </b-col>
   </b-row>
 </template>
 

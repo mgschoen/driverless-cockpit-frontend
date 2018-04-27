@@ -46,3 +46,26 @@ a, button{
   display: block;
   margin: 8px 13px;
 }
+
+/* Custom theme for vue-switcher */
+.vue-switcher-theme--fsd {
+  &.vue-switcher-color--default {
+    div {
+      background-color: var(--app-highlight-dark-color);
+
+      &:after {
+        background-color: var(--app-highlight-medium-color);
+      }
+    }
+
+    &.vue-switcher--unchecked {
+      div {
+        background-color: var(--app-background-color);
+
+        &:after {
+          background-color: var(--app-primary-light-color);
+        }
+      }
+    }
+  }
+}
