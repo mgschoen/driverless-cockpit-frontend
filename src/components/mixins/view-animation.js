@@ -25,25 +25,28 @@ export default {
   }, */
 
   animateVehicle: function () {
-    if (this.shapeVehicle) {
-      let livePosition = {
-        x: this.liveStats.vehicleX,
-        y: this.liveStats.vehicleY
+    let activeFrame = (this.viewDataSource === 'live')
+      ? this.liveStats
+      : this.replay.activeFrame
+    if (activeFrame && this.shapeVehicle) {
+      let nextVehiclePosition = {
+        x: activeFrame.vehicleX,
+        y: activeFrame.vehicleY
       }
 
       // Only update vehicle if its position has changed since last animation frame
-      if (livePosition.x !== this.lastKnownVehiclePosition.x ||
-          livePosition.y !== this.lastKnownVehiclePosition.y) {
+      if (nextVehiclePosition.x !== this.lastKnownVehiclePosition.x ||
+          nextVehiclePosition.y !== this.lastKnownVehiclePosition.y) {
         // move
         this.shapeVehicle.position({
-          x: meterToPixels(this.liveStats.vehicleX),
-          y: meterToPixels(this.liveStats.vehicleY)
+          x: meterToPixels(nextVehiclePosition.x),
+          y: meterToPixels(nextVehiclePosition.y)
         })
 
         // rotate
         let direction = {
-          x: livePosition.x - this.lastKnownVehiclePosition.x,
-          y: livePosition.y - this.lastKnownVehiclePosition.y
+          x: nextVehiclePosition.x - this.lastKnownVehiclePosition.x,
+          y: nextVehiclePosition.y - this.lastKnownVehiclePosition.y
         }
         let dirLength = Math.sqrt(Math.pow(direction.x, 2) + Math.pow(direction.y, 2))
         let cosine = direction.x / dirLength
@@ -51,8 +54,8 @@ export default {
         this.shapeVehicle.rotation((direction.y >= 0) ? degree : (360 - degree))
 
         // update last known position
-        this.lastKnownVehiclePosition.x = livePosition.x
-        this.lastKnownVehiclePosition.y = livePosition.y
+        this.lastKnownVehiclePosition.x = nextVehiclePosition.x
+        this.lastKnownVehiclePosition.y = nextVehiclePosition.y
       }
     }
   },

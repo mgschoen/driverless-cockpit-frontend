@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from '@/store/store'
 import DashboardView from '@/router/views/DashboardView'
 import RecordingsView from '@/router/views/RecordingsView'
 import RecordingControls from '@/components/RecordingControls'
@@ -10,7 +11,7 @@ import CardsReplay from '@/components/CardsReplay'
 
 Vue.use(Router)
 
-export default new Router({
+let router = new Router({
   routes: [
     {
       path: '/',
@@ -50,3 +51,14 @@ export default new Router({
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  if (to.path.split('/').indexOf('live') >= 0) {
+    store.commit('updateViewDataSource', 'live')
+  } else {
+    store.commit('updateViewDataSource', 'replay')
+  }
+  next()
+})
+
+export default router

@@ -37,7 +37,8 @@ export default new Vuex.Store({
     globalLoader: {
       show: false,
       message: 'Loading...'
-    }
+    },
+    viewDataSource: 'live'
   },
   mutations: Mutations,
   actions: Actions

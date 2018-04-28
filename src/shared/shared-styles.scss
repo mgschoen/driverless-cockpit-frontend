@@ -48,7 +48,11 @@ a, button{
 }
 
 /* Custom theme for vue-switcher */
-.vue-switcher-theme--fsd {
+.vue-switcher.vue-switcher-theme--fsd {
+  & input {
+    width: auto;
+  }
+
   &.vue-switcher-color--default {
     div {
       background-color: var(--app-highlight-dark-color);

@@ -1,7 +1,8 @@
 import Util from '@/shared/util'
 import StoreUtil from '@/store/store-util'
 
-const REPLAY_VALID_MODES = ['playing', 'paused', 'stopped']
+const VALID_REPLAY_MODES = ['playing', 'paused', 'stopped']
+const VALID_VIEW_DATA_SOURCES = ['live', 'replay']
 
 export default {
   updateEntity (state, options) {
@@ -20,7 +21,7 @@ export default {
     }
   },
   updateReplayMode (state, newMode) {
-    if (REPLAY_VALID_MODES.indexOf(newMode) >= 0) {
+    if (VALID_REPLAY_MODES.indexOf(newMode) >= 0) {
       state.replay.mode = newMode
     } else {
       throw new Error(newMode + ' is not a valid replay mode')
@@ -54,6 +55,13 @@ export default {
       state.globalLoader.show = settings.show
     } else {
       throw new Error('Missing properties: ' + validation.missing)
+    }
+  },
+  updateViewDataSource (state, newDataSource) {
+    if (VALID_VIEW_DATA_SOURCES.indexOf(newDataSource) >= 0) {
+      state.viewDataSource = newDataSource
+    } else {
+      throw new Error(newDataSource + ' is not a valid data source')
     }
   }
 }

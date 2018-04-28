@@ -5,21 +5,21 @@
         <div id="mapWrapper"></div>
       </b-col>
     </b-row>
-    <b-row class="mapControls" align-h="end">
-      <b-col cols="12" sm="auto" class="controlsCol">
+    <b-row class="mapControls" align-h="center">
+      <b-col cols="auto" sm="auto" class="controlsCol">
         <div class="controlsFrame">
           <switches v-model="showGrid"
                     theme="fsd"
                     label="Show Grid"></switches>
         </div>
       </b-col>
-      <b-col cols="12" sm="auto" class="controlsCol">
+      <b-col cols="auto" sm="auto" class="controlsCol">
         <div class="controlsFrame">
           <label>Zoom Level</label>
           <code>{{zoomLevel}}</code>
         </div>
       </b-col>
-      <b-col cols="12" sm="auto" class="controlsCol">
+      <b-col cols="auto" sm="auto" class="controlsCol">
         <div class="controlsFrame">
           <switches v-model="focusVehicle"
                     theme="fsd"
@@ -47,6 +47,7 @@ export default {
     return {
       // program logic internals
       lastKnownVehiclePosition: { x: 0, y: 0 },
+      dataSource: 'live',
 
       // render objects
       stage: null,
@@ -81,7 +82,9 @@ export default {
   },
   computed: {
     ...mapState([
-      'liveStats'
+      'liveStats',
+      'replay',
+      'viewDataSource'
     ])
   },
   watch: {
@@ -217,12 +220,13 @@ export default {
   width: 100%;
 }
 .mapControls {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .controlsCol {
   padding-left: 7.5px;
   padding-right: 7.5px;
+  margin-bottom: 10px;
 }
 .controlsCol:last-of-type {
   padding-right: 15px;
