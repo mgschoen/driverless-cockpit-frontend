@@ -26,10 +26,12 @@ export default new Vuex.Store({
       vehicleVelocityY: 0,
       vehicleRotation: 0,
       frontwheelLeftRotation: 0,
-      frontwheelRightRotation: 0
+      frontwheelRightRotation: 0,
+      observations: []
     },
     replay: {
       mode: 'stopped',
+      delta: 0,
       selectedRecording: null,
       activeFrame: null
     },

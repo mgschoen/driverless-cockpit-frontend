@@ -1,5 +1,5 @@
 import { meterToPixels } from '@/shared/util'
-// import Grid from './grid'
+import Konva from 'konva'
 
 export default {
   /* _animateMiddlePath: _ => {
@@ -24,15 +24,19 @@ export default {
     }
   }, */
 
-  animateVehicle: function () {
+  drive: function () {
     let activeFrame = (this.viewDataSource === 'live')
       ? this.liveStats
       : this.replay.activeFrame
-    if (activeFrame && this.shapeVehicle) {
-      let nextVehiclePosition = {
-        x: activeFrame.vehicleX,
-        y: activeFrame.vehicleY
-      }
+    if (activeFrame) {
+      this.animateVehicle(activeFrame.vehicleX, activeFrame.vehicleY)
+      this.animateObservations((activeFrame.observations))
+    }
+  },
+
+  animateVehicle: function (x, y) {
+    if (this.shapeVehicle) {
+      let nextVehiclePosition = { x: x, y: y }
 
       // Only update vehicle if its position has changed since last animation frame
       if (nextVehiclePosition.x !== this.lastKnownVehiclePosition.x ||
@@ -51,13 +55,37 @@ export default {
         let dirLength = Math.sqrt(Math.pow(direction.x, 2) + Math.pow(direction.y, 2))
         let cosine = direction.x / dirLength
         let degree = Math.acos(cosine) * (180 / Math.PI)
-        this.shapeVehicle.rotation((direction.y >= 0) ? degree : (360 - degree))
+        let rotation = (direction.y >= 0) ? degree : (360 - degree)
+        if (this.viewDataSource === 'replay' && this.replay.delta < 0) {
+          rotation = (rotation + 180) % 360
+        }
+        this.shapeVehicle.rotation(rotation)
 
         // update last known position
         this.lastKnownVehiclePosition.x = nextVehiclePosition.x
         this.lastKnownVehiclePosition.y = nextVehiclePosition.y
       }
     }
+  },
+
+  animateObservations: function (observationsList) {
+    let newDots = []
+    for (let observation of observationsList) {
+      newDots.push(new Konva.Circle({
+        x: meterToPixels(observation.x),
+        y: meterToPixels(observation.y),
+        radius: 4,
+        fill: 'black'
+      }))
+    }
+    for (let oldShape of this.observationsShapes) {
+      oldShape.destroy()
+    }
+    for (let newShape of newDots) {
+      this.observationsLayer.add(newShape)
+    }
+    this.observationsShapes = newDots
+    this.observationsLayer.draw()
   },
 
   animateStage: function () {

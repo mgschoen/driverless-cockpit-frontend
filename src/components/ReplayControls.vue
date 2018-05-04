@@ -87,7 +87,8 @@ export default {
     }
   }),
   watch: {
-    position: function (newPosition) {
+    position: function (newPosition, oldPosition) {
+      this.$store.commit('updateReplayDelta', newPosition - oldPosition)
       this.$store.commit('updateReplayRecordingActiveFrame', newPosition)
     }
   },

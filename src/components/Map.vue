@@ -47,7 +47,7 @@ export default {
     return {
       // program logic internals
       lastKnownVehiclePosition: { x: 0, y: 0 },
-      dataSource: 'live',
+      // dataSource: 'live',
 
       // render objects
       stage: null,
@@ -60,6 +60,9 @@ export default {
       vehicleLayer: null,
       shapeVehicle: null,
 
+      observationsLayer: null,
+      observationsShapes: [],
+
       // animations
       animationStage: null,
       animationVehicle: null,
@@ -68,6 +71,7 @@ export default {
 
       // view parameters
       zoomStep: 1.1,
+      lastTouchDistance: null,
       minZoomScale: 0.15,
       maxZoomScale: 5.0,
       zoomLevel: 1.00,
@@ -120,8 +124,10 @@ export default {
     // create layers
     this.gridLayer = new Konva.Layer()
     this.vehicleLayer = new Konva.Layer()
+    this.observationsLayer = new Konva.Layer()
     this.stage.add(this.gridLayer)
     this.stage.add(this.vehicleLayer)
+    this.stage.add(this.observationsLayer)
 
     if (!this.showGrid) {
       this.gridLayer.hide()
@@ -173,8 +179,8 @@ export default {
     // add animations
     /* this.animationMiddlePath = new Konva.Animation(this._animateMiddlePath.bind(this), this.vehicleLayer)
     this.animationTrack = new Konva.Animation(this._animateTrack.bind(this), this.vehicleLayer) */
-    this.animationVehicle = new Konva.Animation(this.animateVehicle, this.vehicleLayer)
-    this.animationStage = new Konva.Animation(this.animateStage, this.vehicleLayer)
+    this.animationVehicle = new Konva.Animation(this.drive, [this.vehicleLayer, this.observationsLayer])
+    this.animationStage = new Konva.Animation(this.animateStage)
 
     // start animations
     /* this.animationMiddlePath.start()
@@ -192,8 +198,12 @@ export default {
     })
 
     // initialise zoom
-    this.stage.attrs.container.addEventListener('mousewheel', this._performZoom.bind(this))
-    this.stage.attrs.container.addEventListener('wheel', this._performZoom.bind(this))
+    this.stage.attrs.container.addEventListener('mousewheel', this.performZoom.bind(this))
+    this.stage.attrs.container.addEventListener('wheel', this.performZoom.bind(this))
+    this.stage.attrs.container.addEventListener('touchmove', this.performZoomTouch)
+    this.stage.attrs.container.addEventListener('touchend', _ => {
+      this.lastTouchDistance = null
+    })
 
     // initialise canvas resizing
     window.addEventListener('load', this.resizeCanvas.bind(this))

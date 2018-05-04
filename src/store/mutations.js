@@ -48,6 +48,9 @@ export default {
     })
     state.replay.activeFrame = frames[minimumDistanceIndex]
   },
+  updateReplayDelta (state, newDelta) {
+    state.replay.delta = newDelta
+  },
   updateGlobalLoader (state, settings) {
     let validation = Util.validateObjectSchema(settings, ['show', 'message'])
     if (validation.valid) {
