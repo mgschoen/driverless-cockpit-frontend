@@ -30,7 +30,8 @@ export default {
       : this.replay.activeFrame
     if (activeFrame) {
       this.animateVehicle(activeFrame.vehicleX, activeFrame.vehicleY)
-      this.animateObservations((activeFrame.observations))
+      this.animateObservations(activeFrame.observations)
+      this.animateClusters(activeFrame.clusters)
     }
   },
 
@@ -74,7 +75,7 @@ export default {
       newDots.push(new Konva.Circle({
         x: meterToPixels(observation.x),
         y: meterToPixels(observation.y),
-        radius: 4,
+        radius: meterToPixels(0.2),
         fill: 'black'
       }))
     }
@@ -86,6 +87,57 @@ export default {
     }
     this.observationsShapes = newDots
     this.observationsLayer.draw()
+  },
+
+  animateClusters: function (clusterList) {
+    for (let id in clusterList) {
+      let cluster = clusterList[id]
+      // only update view if cluster has changed
+      if (cluster.hash !== this.clusterHashes[id]) {
+        if (this.clusterShapes[id]) {
+          this.clusterShapes[id].position({
+            x: meterToPixels(cluster.middleX),
+            y: meterToPixels(cluster.middleY)
+          })
+          this.clusterShapes[id].rotation = cluster.angle
+          let ellipses = this.clusterShapes[id].getChildren()
+          for (let i = ellipses.length; i > 0; i--) {
+            ellipses[i - 1].size({
+              width: meterToPixels(cluster.width * i),
+              height: meterToPixels(cluster.height * i)
+            })
+          }
+        } else {
+          let newCluster = new Konva.Group({
+            x: meterToPixels(cluster.middleX),
+            y: meterToPixels(cluster.middleY),
+            rotation: cluster.angle
+          })
+          for (let i of [4, 3, 2, 1]) {
+            newCluster.add(new Konva.Ellipse({
+              radius: {
+                x: meterToPixels(cluster.width * i),
+                y: meterToPixels(cluster.height * i)
+              },
+              fill: (cluster.color === 0) ? 'yellow' : 'blue',
+              opacity: 0.5
+            }))
+          }
+          this.clusterShapes[id] = newCluster
+          this.clusterLayer.add(newCluster)
+        }
+        this.clusterHashes[id] = cluster.hash
+      }
+    }
+    // remove all clusters that are not in clusterList
+    for (let shapeID in this.clusterShapes) {
+      if (!clusterList.hasOwnProperty(shapeID)) {
+        console.log('destroying a lot of shapes')
+        this.clusterShapes[shapeID].destroy()
+        delete this.clusterShapes[shapeID]
+      }
+    }
+    this.clusterLayer.draw()
   },
 
   animateStage: function () {

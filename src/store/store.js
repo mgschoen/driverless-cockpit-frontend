@@ -27,7 +27,8 @@ export default new Vuex.Store({
       vehicleRotation: 0,
       frontwheelLeftRotation: 0,
       frontwheelRightRotation: 0,
-      observations: []
+      observations: [],
+      clusters: {}
     },
     replay: {
       mode: 'stopped',

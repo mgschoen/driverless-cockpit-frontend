@@ -7,7 +7,7 @@ const VALID_VIEW_DATA_SOURCES = ['live', 'replay']
 export default {
   updateEntity (state, options) {
     let stateObject = StoreUtil.getStateObjectFromIdentifier(state, options.entityIdentifier)
-    for (var key in options.payload) {
+    for (let key in options.payload) {
       if (stateObject.hasOwnProperty(key)) {
         stateObject[key] = options.payload[key]
       }

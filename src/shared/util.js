@@ -1,4 +1,4 @@
-const PX_PER_METER = 20
+const PX_PER_METER = 10
 
 module.exports = {
   /**

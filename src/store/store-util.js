@@ -6,7 +6,7 @@ const CONFIG = {
   liveStats: {
     requiredProperties: ['timestamp', 'steerAngle', 'pathMiddleX', 'pathMiddleY', 'vehicleX',
       'vehicleY', 'vehicleVelocityX', 'vehicleVelocityY', 'vehicleRotation', 'frontwheelLeftRotation',
-      'frontwheelRightRotation', 'observations'],
+      'frontwheelRightRotation', 'observations', 'clusters'],
     refreshInterval: 100
   }
 }

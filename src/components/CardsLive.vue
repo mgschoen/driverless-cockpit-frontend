@@ -3,7 +3,33 @@
     <b-col md="6" lg="4">
       <b-card title="Live stats">
         <p class="card-text">
-        <pre>{{liveStatsFiltered}}</pre>
+        <pre>
+timestamp: {{liveStatsFiltered.timestamp}}
+steerAngle: {{liveStatsFiltered.steerAngle}}
+pathMiddleX: {{liveStatsFiltered.pathMiddleX}}
+pathMiddleY: {{liveStatsFiltered.pathMiddleY}}
+vehicleX: {{liveStatsFiltered.vehicleX}}
+vehicleY: {{liveStatsFiltered.vehicleY}}
+vehicleVelocityX: {{liveStatsFiltered.vehicleVelocityX}}
+vehicleVelocityY: {{liveStatsFiltered.vehicleVelocityY}}
+vehicleRotation: {{liveStatsFiltered.vehicleRotation}}
+frontwheelLeftRotation: {{liveStatsFiltered.frontwheelLeftRotation}}
+frontwheelRightRotation: {{liveStatsFiltered.frontwheelRightRotation}}
+        </pre>
+        </p>
+      </b-card>
+    </b-col>
+    <b-col md="6" lg="4">
+      <b-card title="Observations">
+        <p class="card-text">
+        <pre>{{liveStatsFiltered.observations}}</pre>
+        </p>
+      </b-card>
+    </b-col>
+    <b-col md="6" lg="4">
+      <b-card title="Clusters">
+        <p class="card-text">
+        <!--pre>{{liveStatsFiltered.clusters}}</pre-->
         </p>
       </b-card>
     </b-col>

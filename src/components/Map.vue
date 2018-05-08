@@ -47,7 +47,6 @@ export default {
     return {
       // program logic internals
       lastKnownVehiclePosition: { x: 0, y: 0 },
-      // dataSource: 'live',
 
       // render objects
       stage: null,
@@ -59,6 +58,11 @@ export default {
 
       vehicleLayer: null,
       shapeVehicle: null,
+
+      clusterLayer: null,
+      clusterBaseCircles: {},
+      clusterShapes: {},
+      clusterHashes: {},
 
       observationsLayer: null,
       observationsShapes: [],
@@ -121,12 +125,30 @@ export default {
       height: 500
     })
 
+    // define the base circles used for drawing clusters
+    this.clusterBaseCircles = {
+      yellow: [
+        new Konva.Circle({radius: 1, fill: 'yellow', opacity: 0.5}),
+        new Konva.Circle({radius: 2, fill: 'yellow', opacity: 0.5}),
+        new Konva.Circle({radius: 3, fill: 'yellow', opacity: 0.5}),
+        new Konva.Circle({radius: 4, fill: 'yellow', opacity: 0.5})
+      ],
+      blue: [
+        new Konva.Circle({radius: 1, fill: 'blue', opacity: 0.5}),
+        new Konva.Circle({radius: 2, fill: 'blue', opacity: 0.5}),
+        new Konva.Circle({radius: 3, fill: 'blue', opacity: 0.5}),
+        new Konva.Circle({radius: 4, fill: 'blue', opacity: 0.5})
+      ]
+    }
+
     // create layers
     this.gridLayer = new Konva.Layer()
     this.vehicleLayer = new Konva.Layer()
+    this.clusterLayer = new Konva.Layer()
     this.observationsLayer = new Konva.Layer()
     this.stage.add(this.gridLayer)
     this.stage.add(this.vehicleLayer)
+    this.stage.add(this.clusterLayer)
     this.stage.add(this.observationsLayer)
 
     if (!this.showGrid) {
@@ -179,7 +201,11 @@ export default {
     // add animations
     /* this.animationMiddlePath = new Konva.Animation(this._animateMiddlePath.bind(this), this.vehicleLayer)
     this.animationTrack = new Konva.Animation(this._animateTrack.bind(this), this.vehicleLayer) */
-    this.animationVehicle = new Konva.Animation(this.drive, [this.vehicleLayer, this.observationsLayer])
+    this.animationVehicle = new Konva.Animation(this.drive, [
+      this.vehicleLayer,
+      this.clusterLayer,
+      this.observationsLayer
+    ])
     this.animationStage = new Konva.Animation(this.animateStage)
 
     // start animations
