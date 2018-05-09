@@ -2,28 +2,6 @@ import { meterToPixels } from '@/shared/util'
 import Konva from 'konva'
 
 export default {
-  /* _animateMiddlePath: _ => {
-    let points = this.shapeMiddlePath.points()
-    let last = {x: points[points.length - 2], y: points[points.length - 1] }
-    if (this.__pathMiddleX != last.x || this.__pathMiddleX != last.y) {
-      if (points.length >= 2 && points[0] == 0 && points[1] == 0) {
-        points.shift(); points.shift()
-      }
-      this.shapeMiddlePath.points(points.concat([this.__pathMiddleX, this.__pathMiddleY]))
-    }
-  },
-
-  _animateTrack: _ => {
-    let points = this.shapeTrack.points()
-    let last = {x: points[points.length - 2], y: points[points.length - 1] }
-    if (this.__vehicleX != last.x || this.__vehicleY != last.y) {
-      if (points.length >= 2 && points[0] == 0 && points[1] == 0) {
-        points.shift(); points.shift()
-      }
-      this.shapeTrack.points(points.concat([this.__vehicleX, this.__vehicleY]))
-    }
-  }, */
-
   drive: function () {
     let activeFrame = (this.viewDataSource === 'live')
       ? this.liveStats
@@ -91,53 +69,70 @@ export default {
 
   animateClusters: function (clusterList) {
     for (let id in clusterList) {
-      let cluster = clusterList[id]
-      // only update view if cluster has changed
-      if (cluster.hash !== this.clusterHashes[id]) {
-        if (this.clusterShapes[id]) {
-          this.clusterShapes[id].position({
-            x: meterToPixels(cluster.middleX),
-            y: meterToPixels(cluster.middleY)
-          })
-          this.clusterShapes[id].rotation = cluster.angle
-          let ellipses = this.clusterShapes[id].getChildren()
-          for (let i = ellipses.length; i > 0; i--) {
-            ellipses[i - 1].size({
-              width: meterToPixels(cluster.width * i),
-              height: meterToPixels(cluster.height * i)
+      // Definitions
+      let clusterDefinition = clusterList[id]
+      let position = {
+        x: meterToPixels(clusterDefinition.middleX),
+        y: meterToPixels(clusterDefinition.middleY)
+      }
+      let maxRadius = meterToPixels(Math.max(clusterDefinition.width, clusterDefinition.height))
+      let inVisibleViewport = this.isInVisibleWorld(position, maxRadius)
+      let clusterShapeExists = this.clusterShapes.hasOwnProperty(id)
+
+      // Only draw shapes that are actually visible
+      if (inVisibleViewport) {
+        if (clusterShapeExists) {
+          if (clusterDefinition.hash !== this.clusterHashes[id]) {
+            // If a shape already exists and there have been changes, rerender the shape
+            this.clusterShapes[id].position({
+              x: meterToPixels(clusterDefinition.middleX),
+              y: meterToPixels(clusterDefinition.middleY)
             })
+            this.clusterShapes[id].rotation = clusterDefinition.angle
+            let ellipses = this.clusterShapes[id].getChildren()
+            for (let i = ellipses.length; i > 0; i--) {
+              ellipses[i - 1].size({
+                width: meterToPixels(clusterDefinition.width * i),
+                height: meterToPixels(clusterDefinition.height * i)
+              })
+            }
           }
         } else {
+          // If no shape exists, render a new one
           let newCluster = new Konva.Group({
-            x: meterToPixels(cluster.middleX),
-            y: meterToPixels(cluster.middleY),
-            rotation: cluster.angle
+            x: meterToPixels(clusterDefinition.middleX),
+            y: meterToPixels(clusterDefinition.middleY),
+            rotation: clusterDefinition.angle
           })
-          for (let i of [4, 3, 2, 1]) {
+          for (let i of [3, 2, 1]) {
             newCluster.add(new Konva.Ellipse({
-              radius: {
-                x: meterToPixels(cluster.width * i),
-                y: meterToPixels(cluster.height * i)
-              },
-              fill: (cluster.color === 0) ? 'yellow' : 'blue',
+              width: meterToPixels(clusterDefinition.width * i),
+              height: meterToPixels(clusterDefinition.height * i),
+              fill: (clusterDefinition.color === 0) ? 'yellow' : 'blue',
               opacity: 0.5
             }))
           }
           this.clusterShapes[id] = newCluster
           this.clusterLayer.add(newCluster)
         }
-        this.clusterHashes[id] = cluster.hash
+      } else {
+        if (clusterShapeExists) {
+          this.clusterShapes[id].destroyChildren()
+          this.clusterShapes[id].destroy()
+          delete this.clusterShapes[id]
+        }
       }
+
+      this.clusterHashes[id] = clusterDefinition.hash
     }
     // remove all clusters that are not in clusterList
     for (let shapeID in this.clusterShapes) {
       if (!clusterList.hasOwnProperty(shapeID)) {
-        console.log('destroying a lot of shapes')
         this.clusterShapes[shapeID].destroy()
         delete this.clusterShapes[shapeID]
       }
     }
-    this.clusterLayer.draw()
+    this.clusterLayer.batchDraw()
   },
 
   animateStage: function () {
@@ -157,37 +152,28 @@ export default {
   },
 
   redrawGrid: function () {
-    // determine viewport size and translation
-    let scale = this.stage.scale()
-    let visibleViewportSize = {
-      width: this.stage.width() / scale.x,
-      height: this.stage.height() / scale.y
-    }
-    let realWorldViewportTranslation = {
-      x: this.stage.x() / scale.x,
-      y: this.stage.y() / scale.y
-    }
+    let visibleWorldDimensions = this.getVisibleWorldDimensions()
 
     // redraw coordinate axis
     this.shapeXAxis.points([
-      -realWorldViewportTranslation.x, 0,
-      -realWorldViewportTranslation.x + visibleViewportSize.width, 0
+      visibleWorldDimensions.x, 0,
+      visibleWorldDimensions.x + visibleWorldDimensions.width, 0
     ])
     this.shapeYAxis.points([
-      0, -realWorldViewportTranslation.y,
-      0, -realWorldViewportTranslation.y + visibleViewportSize.height
+      0, visibleWorldDimensions.y,
+      0, visibleWorldDimensions.y + visibleWorldDimensions.height
     ])
 
     // redraw grid
     if (this.zoomLevel > 0.5) {
       let gridPosition = {
-        x: -100 - Math.round(realWorldViewportTranslation.x / 100) * 100,
-        y: -100 - Math.round(realWorldViewportTranslation.y / 100) * 100
+        x: -100 + Math.round(visibleWorldDimensions.x / 100) * 100,
+        y: -100 + Math.round(visibleWorldDimensions.y / 100) * 100
       }
       this.shapeGrid.setPosition(gridPosition)
       this.shapeGrid.setSize({
-        width: visibleViewportSize.width + 200,
-        height: visibleViewportSize.height + 200
+        width: visibleWorldDimensions.width + 200,
+        height: visibleWorldDimensions.height + 200
       })
       this.shapeGrid.show()
     } else {

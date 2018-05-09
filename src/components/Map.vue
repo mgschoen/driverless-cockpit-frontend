@@ -40,6 +40,7 @@ import Switches from 'vue-switches'
 import { meterToPixels } from '@/shared/util'
 import ViewZoom from './mixins/view-zoom'
 import ViewAnimation from './mixins/view-animation'
+import ViewportUtil from './mixins/viewport-util'
 
 export default {
   name: 'Map',
@@ -240,7 +241,8 @@ export default {
       this.stage.width(this.$el.querySelector('#mapWrapper').offsetWidth)
     },
     ...ViewZoom,
-    ...ViewAnimation
+    ...ViewAnimation,
+    ...ViewportUtil
   },
   components: {
     Switches
