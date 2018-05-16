@@ -10,6 +10,7 @@ export default {
       this.animateVehicle(activeFrame.vehicleX, activeFrame.vehicleY)
       this.animateObservations(activeFrame.observations)
       this.animateClusters(activeFrame.clusters)
+      this.animateTrajectory(activeFrame.trajectory, activeFrame.trajectoryHash)
     }
   },
 
@@ -133,6 +134,17 @@ export default {
       }
     }
     this.clusterLayer.batchDraw()
+  },
+
+  animateTrajectory: function (points, hash) {
+    if (hash !== this.lastKnownTrajectoryHash) {
+      let pointsTransponed = points.map(v => {
+        return meterToPixels(v)
+      })
+      this.shapeTrajectory.points(pointsTransponed)
+      this.lastKnownTrajectoryHash = hash
+      this.trajectoryLayer.batchDraw()
+    }
   },
 
   animateStage: function () {

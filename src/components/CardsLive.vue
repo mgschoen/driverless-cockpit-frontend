@@ -27,8 +27,9 @@ frontwheelRightRotation: {{liveStatsFiltered.frontwheelRightRotation}}
       </b-card>
     </b-col>
     <b-col md="6" lg="4">
-      <b-card title="Clusters">
+      <b-card title="Trajectory">
         <p class="card-text">
+          <pre>{{liveStatsFiltered.trajectory}}</pre>
         <!--pre>{{liveStatsFiltered.clusters}}</pre-->
         </p>
       </b-card>

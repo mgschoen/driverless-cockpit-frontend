@@ -68,6 +68,10 @@ export default {
       observationsLayer: null,
       observationsShapes: [],
 
+      trajectoryLayer: null,
+      shapeTrajectory: null,
+      lastKnownTrajectoryHash: 0,
+
       // animations
       animationStage: null,
       animationVehicle: null,
@@ -147,10 +151,12 @@ export default {
     this.vehicleLayer = new Konva.Layer()
     this.clusterLayer = new Konva.Layer()
     this.observationsLayer = new Konva.Layer()
+    this.trajectoryLayer = new Konva.Layer()
     this.stage.add(this.gridLayer)
     this.stage.add(this.vehicleLayer)
     this.stage.add(this.clusterLayer)
     this.stage.add(this.observationsLayer)
+    this.stage.add(this.trajectoryLayer)
 
     if (!this.showGrid) {
       this.gridLayer.hide()
@@ -199,13 +205,22 @@ export default {
       this.animateStage()
     })
 
+    // draw trajectory
+    this.shapeTrajectory = new Konva.Line({
+      points: [],
+      stroke: 'red',
+      strokeWidth: 4
+    })
+    this.trajectoryLayer.add(this.shapeTrajectory)
+
     // add animations
     /* this.animationMiddlePath = new Konva.Animation(this._animateMiddlePath.bind(this), this.vehicleLayer)
     this.animationTrack = new Konva.Animation(this._animateTrack.bind(this), this.vehicleLayer) */
     this.animationVehicle = new Konva.Animation(this.drive, [
       this.vehicleLayer,
       this.clusterLayer,
-      this.observationsLayer
+      this.observationsLayer,
+      this.trajectoryLayer
     ])
     this.animationStage = new Konva.Animation(this.animateStage)
 

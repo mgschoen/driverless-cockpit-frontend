@@ -28,7 +28,10 @@ export default new Vuex.Store({
       frontwheelLeftRotation: 0,
       frontwheelRightRotation: 0,
       observations: [],
-      clusters: {}
+      clusters: {},
+      trajectoryPrimitives: [],
+      trajectoryHash: 0,
+      trajectory: []
     },
     replay: {
       mode: 'stopped',
