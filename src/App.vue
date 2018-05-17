@@ -12,7 +12,12 @@
         <b-navbar-nav>
           <b-nav-item to="/recordings">
             <b-button variant="primary" size="sm">
-              <img src="@/assets/play-white.svg" width="10" class="replay-icon"> Replay
+              <img src="@/assets/play-white.svg" width="10" class="nav-icon"> Replay
+            </b-button>
+          </b-nav-item>
+          <b-nav-item @click="resetStats">
+            <b-button variant="outline-neutral" size="sm">
+              <img src="@/assets/reload.svg" width="10" class="nav-icon"> Reset stats
             </b-button>
           </b-nav-item>
         </b-navbar-nav>
@@ -68,6 +73,16 @@ export default {
   created: function () {
     this.$store.dispatch('startRefreshingEntity', 'appState')
   },
+  methods: {
+    resetStats: function () {
+      this.$store.commit('updateGlobalLoader', {show: true, message: 'Resetting stats...'})
+      this.$store.dispatch('resetStats').then(_ => {
+        this.$store.commit('updateGlobalLoader', {show: false, message: ''})
+      }, error => {
+        console.log(error)
+      })
+    }
+  },
   components: {
     StatusLight
   }
@@ -90,7 +105,7 @@ export default {
 .container {
   margin-top: 20px;
 }
-.replay-icon {
+.nav-icon {
   margin-bottom: 4px;
 }
 </style>

@@ -25,6 +25,17 @@ export default {
     })
   },
 
+  resetStats () {
+    return new Promise((resolve, reject) => {
+      let apiRoute = StoreUtil.getApiRouteFromIdentifier('resetStats')
+      Vue.http.get(apiRoute).then(response => {
+        resolve()
+      }, error => {
+        reject(error)
+      })
+    })
+  },
+
   switchRecordingStatus (context, statusIdentifier) {
     return new Promise((resolve, reject) => {
       let apiRoute = StoreUtil.getApiRouteFromIdentifier(statusIdentifier)

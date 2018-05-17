@@ -39,6 +39,20 @@ a, button{
       border-color: var(--app-primary-light-color);
     }
   }
+
+  &.btn-outline-neutral {
+    background-color: rgba(0,0,0,0);
+    border-color: var(--app-primary-light-color);
+    color: var(--app-lighttext-color);
+
+    &:hover,
+    &:focus,
+    &:active {
+      background-color: var(--app-background-color);
+      border-color: var(--app-background-color);
+      color: var(--app-primary-color);
+    }
+  }
 }
 
 /* Indent an inline element as if it were inside a b-button */

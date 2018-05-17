@@ -32,6 +32,8 @@ module.exports = {
         return 'recording/start'
       case 'stop':
         return 'recording/stop'
+      case 'resetStats':
+        return 'resetstats'
       default:
         throw new Error('Unknown entity identifier: ' + identifier)
     }
