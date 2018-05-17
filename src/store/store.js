@@ -12,7 +12,8 @@ export default new Vuex.Store({
       refresh: false,
       activeRecording: null,
       connected: false,
-      recording: false
+      recording: false,
+      presentationMode: false
     },
     liveStats: {
       refresh: false,

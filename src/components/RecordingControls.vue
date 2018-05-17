@@ -74,14 +74,22 @@ export default {
   methods: {
     triggerRecording: function () {
       if (!this.appState.recording) {
-        this.action = 'record'
-        this.showPrompt = true
+        if (this.appState.presentationMode) {
+          this.action = 'record'
+          this.showPrompt = true
+        } else {
+          this.record()
+        }
       }
     },
     triggerStop: function () {
       if (this.appState.recording) {
-        this.action = 'stop'
-        this.showPrompt = true
+        if (this.appState.presentationMode) {
+          this.action = 'stop'
+          this.showPrompt = true
+        } else {
+          this.stop()
+        }
       }
     },
     record: function () {

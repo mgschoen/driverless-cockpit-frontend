@@ -1,6 +1,6 @@
 const CONFIG = {
   appState: {
-    requiredProperties: ['activeRecording', 'connected', 'recording'],
+    requiredProperties: ['activeRecording', 'connected', 'recording', 'presentationMode'],
     refreshInterval: 500
   },
   liveStats: {
