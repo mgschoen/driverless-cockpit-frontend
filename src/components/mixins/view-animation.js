@@ -1,4 +1,4 @@
-import { meterToPixels } from '@/shared/util'
+import { meterToPixels, pixelToMeters } from '@/shared/util'
 import Konva from 'konva'
 
 export default {
@@ -192,5 +192,62 @@ export default {
       // if zoom is too far away, just hide the grid
       this.shapeGrid.hide()
     }
+
+    // redraw labels
+    let xMargin = visibleWorldDimensions.x % 100
+    let yMargin = visibleWorldDimensions.y % 100
+    let xFirstLabel = Math.round(visibleWorldDimensions.x - xMargin - 100)
+    let yFirstLabel = Math.round(visibleWorldDimensions.y - yMargin - 100)
+
+    // add new labels
+    for (let x = xFirstLabel; x < visibleWorldDimensions.x + visibleWorldDimensions.width; x += 100) {
+      if (!this.xAxisLabels[x] && x !== 0) {
+        let label = new Konva.Text({
+          x: x,
+          y: 3,
+          text: pixelToMeters(x).toString(),
+          fontSize: 20,
+          fontFamily: 'Verdana',
+          fill: 'black',
+          align: 'center'
+        })
+        label.offsetX(label.width() / 2)
+        this.gridLayer.add(label)
+        this.xAxisLabels[x] = label
+      }
+    }
+
+    for (let y = yFirstLabel; y < visibleWorldDimensions.y + visibleWorldDimensions.height; y += 100) {
+      if (!this.yAxisLabels[y] && y !== 0) {
+        let label = new Konva.Text({
+          x: 0,
+          y: y,
+          text: pixelToMeters(y).toString(),
+          fontSize: 20,
+          fontFamily: 'Verdana',
+          fill: 'black',
+          align: 'center'
+        })
+        label.x(-5 - label.width())
+        label.offsetY(label.height() / 2)
+        this.gridLayer.add(label)
+        this.yAxisLabels[y] = label
+      }
+    }
+
+    // remove unused labels
+    Object.keys(this.xAxisLabels).filter(key => {
+      return (key < xFirstLabel - 100 || key > visibleWorldDimensions.x + visibleWorldDimensions.width + 100)
+    }).forEach(key => {
+      this.xAxisLabels[key].destroy()
+      delete this.xAxisLabels[key]
+    })
+
+    Object.keys(this.yAxisLabels).filter(key => {
+      return (key < yFirstLabel - 100 || key > visibleWorldDimensions.x + visibleWorldDimensions.width + 100)
+    }).forEach(key => {
+      this.yAxisLabels[key].destroy()
+      delete this.yAxisLabels[key]
+    })
   }
 }

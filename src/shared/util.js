@@ -48,5 +48,8 @@ module.exports = {
   },
   meterToPixels: function (m) {
     return Math.round(m * PX_PER_METER)
+  },
+  pixelToMeters: function (px) {
+    return px / PX_PER_METER
   }
 }

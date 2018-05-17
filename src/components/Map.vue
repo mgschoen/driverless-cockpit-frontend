@@ -56,6 +56,8 @@ export default {
       shapeGrid: null,
       shapeXAxis: null,
       shapeYAxis: null,
+      xAxisLabels: {},
+      yAxisLabels: {},
 
       vehicleLayer: null,
       shapeVehicle: null,
@@ -89,7 +91,7 @@ export default {
       showVehicle: true,
       showTrack: true,
       showMiddlePath: true,
-      showGrid: false,
+      showGrid: true,
       focusVehicle: true
     }
   },
