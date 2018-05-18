@@ -51,5 +51,9 @@ module.exports = {
   },
   pixelToMeters: function (px) {
     return px / PX_PER_METER
+  },
+  precisionRound: function (number, precision) {
+    let factor = Math.pow(10, precision)
+    return Math.round(number * factor) / factor
   }
 }

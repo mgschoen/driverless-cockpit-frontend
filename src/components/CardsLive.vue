@@ -22,14 +22,14 @@ frontwheelRightRotation: {{liveStatsFiltered.frontwheelRightRotation}}
     <b-col md="6" lg="4">
       <b-card title="Observations">
         <p class="card-text">
-        <pre>{{liveStatsFiltered.observations}}</pre>
+        <!--pre>{{liveStatsFiltered.observations}}</pre-->
         </p>
       </b-card>
     </b-col>
     <b-col md="6" lg="4">
       <b-card title="Trajectory">
         <p class="card-text">
-          <pre>{{liveStatsFiltered.trajectory}}</pre>
+          <!--pre>{{liveStatsFiltered.trajectory}}</pre-->
         <!--pre>{{liveStatsFiltered.clusters}}</pre-->
         </p>
       </b-card>

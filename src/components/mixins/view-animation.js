@@ -158,6 +158,7 @@ export default {
       let onscreenCamFocus = { x: onscreenCampos.x + canvas.x / 2, y: onscreenCampos.y + canvas.y / 2 }
       let onscreenDist = { x: onscreenCarpos.x - onscreenCamFocus.x, y: onscreenCarpos.y - onscreenCamFocus.y }
       this.stage.move({ x: -onscreenDist.x, y: -onscreenDist.y })
+      this.updateRealWorldCursor()
       this.redrawGrid()
       this.stage.batchDraw()
     }
@@ -200,6 +201,7 @@ export default {
     let yFirstLabel = Math.round(visibleWorldDimensions.y - yMargin - 100)
 
     // add new labels
+    // possible but likely useless optimisation: remove labels when axis is out of viewport
     for (let x = xFirstLabel; x < visibleWorldDimensions.x + visibleWorldDimensions.width; x += 100) {
       if (!this.xAxisLabels[x] && x !== 0) {
         let label = new Konva.Text({
