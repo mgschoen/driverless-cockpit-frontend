@@ -12,9 +12,9 @@ vehicleX: {{liveStatsFiltered.vehicleX}}
 vehicleY: {{liveStatsFiltered.vehicleY}}
 vehicleVelocityX: {{liveStatsFiltered.vehicleVelocityX}}
 vehicleVelocityY: {{liveStatsFiltered.vehicleVelocityY}}
+vehicleAccelerationX: {{liveStatsFiltered.vehicleAccelerationX}}
+vehicleAccelerationY: {{liveStatsFiltered.vehicleAccelerationY}}
 vehicleRotation: {{liveStatsFiltered.vehicleRotation}}
-frontwheelLeftRotation: {{liveStatsFiltered.frontwheelLeftRotation}}
-frontwheelRightRotation: {{liveStatsFiltered.frontwheelRightRotation}}
         </pre>
         </p>
       </b-card>
