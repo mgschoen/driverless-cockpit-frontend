@@ -5,8 +5,8 @@ const CONFIG = {
   },
   liveStats: {
     requiredProperties: ['timestamp', 'steerAngle', 'pathMiddleX', 'pathMiddleY', 'vehicleX',
-      'vehicleY', 'vehicleVelocityX', 'vehicleVelocityY', 'vehicleRotation', 'frontwheelLeftRotation',
-      'frontwheelRightRotation', 'observations', 'clusters', 'trajectory', 'trajectoryHash', 'trajectoryPrimitives'],
+      'vehicleY', 'vehicleVelocityX', 'vehicleVelocityY', 'vehicleRotation', 'vehicleAccelerationX',
+      'vehicleAccelerationY', 'observations', 'clusters', 'trajectory', 'trajectoryHash', 'trajectoryPrimitives'],
     refreshInterval: 100
   }
 }
