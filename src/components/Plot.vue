@@ -1,10 +1,21 @@
 <template>
-  <b-card title="Stats" style="width: 100%;">
-    <b-form-select v-model="selectedParameter" :options="plotParameters" @change="updateChart">
-      <option :value="null">Select parameter</option>
-    </b-form-select>
-    <div class="chart"></div>
-  </b-card>
+  <div class="w-50 px-3 pb-4">
+    <b-card class="m-0" style="width: 100%;">
+      <b-row>
+        <b-col>
+          <b-form-select v-model="selectedParameter" :options="plotParameters" @change="updateChart">
+            <option :value="null">Select parameter</option>
+          </b-form-select>
+        </b-col>
+        <b-col cols="auto">
+          <b-button @click="fireDelete">
+            <img src="@/assets/trash.svg" width="14">
+          </b-button>
+        </b-col>
+      </b-row>
+      <div class="chart"></div>
+    </b-card>
+  </div>
 </template>
 
 <script>
@@ -13,6 +24,9 @@ import echarts from 'echarts'
 
 export default {
   name: 'Plot',
+  props: {
+    'id': Number
+  },
   data () {
     return {
       plotParameters: ['steerAngle', 'vehicleRotation', 'vehicleX', 'vehicleY', 'vehicleVelocityX',
@@ -20,9 +34,14 @@ export default {
       selectedParameter: null
     }
   },
-  computed: mapState({
-    replayGlobals: 'replay'
-  }),
+  computed: {
+    activeTimestamp: function () {
+      return this.replayGlobals.activeFrame.timestamp
+    },
+    ...mapState({
+      replayGlobals: 'replay'
+    })
+  },
   mounted () {
     this.chart = echarts.init(this.$el.querySelector('.chart'))
     var option = {
@@ -46,9 +65,11 @@ export default {
         data: []
       }]
     }
-
-    // use configuration item and data specified to show chart
     this.chart.setOption(option)
+
+    // initialise chart resizing
+    window.addEventListener('load', this.resizeChart)
+    window.addEventListener('resize', this.resizeChart)
   },
   methods: {
     updateChart (newValue) {
@@ -64,9 +85,27 @@ export default {
       this.chart.setOption({
         series: [{
           name: 'value',
-          data: data
+          data: data,
+          markLine: {
+            data: [
+              {
+                name: 'head',
+                xAxis: this.activeTimestamp,
+                label: {
+                  show: false
+                },
+                symbolSize: 5
+              }
+            ]
+          }
         }]
       })
+    },
+    resizeChart () {
+      this.chart.resize()
+    },
+    fireDelete () {
+      this.$emit('delete-plot', this.id)
     }
   }
 }
@@ -75,7 +114,7 @@ export default {
 <style scoped>
   .chart {
     width: 100%;
-    min-width: 400px;
-    height: 400px;
+    /*min-width: 400px;*/
+    height: 250px;
   }
 </style>
