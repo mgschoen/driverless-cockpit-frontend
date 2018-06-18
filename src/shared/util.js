@@ -1,5 +1,12 @@
 const PX_PER_METER = 10
 
+const padZeros = (numChars, string) => {
+  let convertedString = string + ''
+  let strlen = convertedString.length
+  let numZeros = Math.max(0, numChars - strlen)
+  return '0'.repeat(numZeros) + string
+}
+
 module.exports = {
   /**
    * If `string` has less than `numChars` characters, prefix it with the matching number of zeros
@@ -7,12 +14,7 @@ module.exports = {
    * @param string - input string
    * @returns {string}
    */
-  padZeros: (numChars, string) => {
-    let convertedString = string + ''
-    let strlen = convertedString.length
-    let numZeros = Math.max(0, numChars - strlen)
-    return '0'.repeat(numZeros) + string
-  },
+  padZeros: padZeros,
   /**
    * Convert a given number of milliseconds to a string of format mm:ss:nnn
    * (m = minutes, s = seconds, n = milliseconds)
@@ -23,9 +25,9 @@ module.exports = {
     let minutes = Math.floor(milliseconds / 60000)
     let seconds = Math.floor((milliseconds % 60000) / 1000)
     let msecs = milliseconds % 1000
-    return this.padZeros(2, minutes) + ':' +
-        this.padZeros(2, seconds) + ':' +
-        this.padZeros(3, msecs)
+    return padZeros(2, minutes) + ':' +
+        padZeros(2, seconds) + ':' +
+        padZeros(3, msecs)
   },
   validateObjectSchema: function (object, requiredProperties) {
     let missing = []

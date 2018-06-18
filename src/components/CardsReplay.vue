@@ -1,10 +1,10 @@
 <template>
   <b-row style="margin-bottom: 50px;">
-    <b-card-group style="width:100%;" ref="plotContainer">
+    <b-card-group style="width:100%;">
       <Plot v-for="p in plots" :key="p" :id="p" @delete-plot="deletePlot"></Plot>
       <div class="w-50 px-3 pb-4 d-flex align-items-center justify-content-center plus-button-container">
         <b-button @click="addPlot">
-          <img src="@/assets/plus.svg" width="50" class="plus-sign">
+          <img src="@/assets/plus.svg" width="30" class="plus-sign">
           <label>Add plot</label>
         </b-button>
       </div>

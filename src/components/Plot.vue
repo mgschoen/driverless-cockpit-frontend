@@ -21,6 +21,7 @@
 <script>
 import { mapState } from 'vuex'
 import echarts from 'echarts'
+import { timerFormat } from '@/shared/util'
 
 export default {
   name: 'Plot',
@@ -31,30 +32,43 @@ export default {
     return {
       plotParameters: ['steerAngle', 'vehicleRotation', 'vehicleX', 'vehicleY', 'vehicleVelocityX',
         'vehicleVelocityY', 'vehicleAccelerationX', 'vehicleAccelerationY'],
-      selectedParameter: null
+      selectedParameter: null,
+
+      // animation
+      markLineInterval: null,
+      lastKnownTimestamp: null
     }
   },
-  computed: {
-    activeTimestamp: function () {
-      return this.replayGlobals.activeFrame.timestamp
-    },
-    ...mapState({
-      replayGlobals: 'replay'
-    })
-  },
+  computed: mapState({
+    replayGlobals: 'replay'
+  }),
   mounted () {
+    let _that = this
+    let formatter = function (value) {
+      let displayValue = value - _that.replayGlobals.selectedRecording.start
+      return timerFormat(displayValue)
+    }
+    let tooltipFormatter = function (series) {
+      let timeString = formatter(series[0].value[0])
+      return `${timeString}<br />${_that.selectedParameter}: ${series[0].value[1]}`
+    }
     this.chart = echarts.init(this.$el.querySelector('.chart'))
     var option = {
       tooltip: {
-        trigger: 'axis'
+        trigger: 'axis',
+        formatter: tooltipFormatter
       },
       dataZoom: [{
-        type: 'slider'
+        type: 'slider',
+        labelFormatter: formatter
       }, {
         type: 'inside'
       }],
       xAxis: {
-        type: 'time'
+        type: 'time',
+        axisLabel: {
+          formatter: formatter
+        }
       },
       yAxis: {
         type: 'value'
@@ -70,6 +84,12 @@ export default {
     // initialise chart resizing
     window.addEventListener('load', this.resizeChart)
     window.addEventListener('resize', this.resizeChart)
+
+    this.markLineInterval = setInterval(this.markLineAnimationTick, 500)
+  },
+  beforeDestroy () {
+    console.log('beforeDestroy')
+    clearInterval(this.markLineInterval)
   },
   methods: {
     updateChart (newValue) {
@@ -90,9 +110,12 @@ export default {
             data: [
               {
                 name: 'head',
-                xAxis: this.activeTimestamp,
+                xAxis: this.replayGlobals.activeFrame.timestamp,
                 label: {
-                  show: false
+                  show: false,
+                  emphasis: {
+                    show: false
+                  }
                 },
                 symbolSize: 5
               }
@@ -106,6 +129,21 @@ export default {
     },
     fireDelete () {
       this.$emit('delete-plot', this.id)
+    },
+    markLineAnimationTick () {
+      let ts = this.replayGlobals.activeFrame.timestamp
+      if (ts !== this.lastKnownTimestamp) {
+        this.lastKnownTimestamp = ts
+        let option = this.chart.getOption()
+        let lineData = null
+        try {
+          lineData = option.series[0].markLine.data[0]
+        } catch (e) {}
+        if (lineData) {
+          lineData.xAxis = this.replayGlobals.activeFrame.timestamp
+          this.chart.setOption({series: [{markLine: {data: [lineData]}}]})
+        }
+      }
     }
   }
 }
@@ -114,7 +152,6 @@ export default {
 <style scoped>
   .chart {
     width: 100%;
-    /*min-width: 400px;*/
     height: 250px;
   }
 </style>
