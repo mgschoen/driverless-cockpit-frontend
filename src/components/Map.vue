@@ -274,7 +274,7 @@ export default {
         let absolutePixelX = viewportDimensions.x + (this.canvasCursorX / this.stage.scaleX())
         let absolutePixelY = viewportDimensions.y + (this.canvasCursorY / this.stage.scaleY())
         this.realWorldCursorX = precisionRound(pixelToMeters(absolutePixelX), 1)
-        this.realWorldCursorY = precisionRound(pixelToMeters(absolutePixelY), 1)
+        this.realWorldCursorY = precisionRound(pixelToMeters(-absolutePixelY), 1)
       } else {
         this.canvasCursorX = null
         this.canvasCursorY = null
