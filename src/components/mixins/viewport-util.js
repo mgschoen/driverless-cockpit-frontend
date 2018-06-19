@@ -29,6 +29,6 @@ export default {
       }
     }
     return (position.x >= range.x.min && position.x <= range.x.max &&
-        position.y >= range.y.min && position.y <= range.y.max)
+        -position.y >= range.y.min && -position.y <= range.y.max)
   }
 }

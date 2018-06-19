@@ -72,7 +72,6 @@ export default {
       shapeVehicle: null,
 
       clusterLayer: null,
-      clusterBaseCircles: {},
       clusterShapes: {},
       clusterHashes: {},
 
@@ -150,28 +149,12 @@ export default {
       height: 500
     })
 
-    // define the base circles used for drawing clusters
-    this.clusterBaseCircles = {
-      yellow: [
-        new Konva.Circle({radius: 1, fill: 'yellow', opacity: 0.5}),
-        new Konva.Circle({radius: 2, fill: 'yellow', opacity: 0.5}),
-        new Konva.Circle({radius: 3, fill: 'yellow', opacity: 0.5}),
-        new Konva.Circle({radius: 4, fill: 'yellow', opacity: 0.5})
-      ],
-      blue: [
-        new Konva.Circle({radius: 1, fill: 'blue', opacity: 0.5}),
-        new Konva.Circle({radius: 2, fill: 'blue', opacity: 0.5}),
-        new Konva.Circle({radius: 3, fill: 'blue', opacity: 0.5}),
-        new Konva.Circle({radius: 4, fill: 'blue', opacity: 0.5})
-      ]
-    }
-
     // create layers
     this.gridLayer = new Konva.Layer()
-    this.vehicleLayer = new Konva.Layer()
-    this.clusterLayer = new Konva.Layer()
-    this.observationsLayer = new Konva.Layer()
-    this.trajectoryLayer = new Konva.Layer()
+    this.vehicleLayer = new Konva.Layer({scaleY: -1})
+    this.clusterLayer = new Konva.Layer({scaleY: -1})
+    this.observationsLayer = new Konva.Layer({scaleY: -1})
+    this.trajectoryLayer = new Konva.Layer({scaleY: -1})
     this.stage.add(this.gridLayer)
     this.stage.add(this.vehicleLayer)
     this.stage.add(this.clusterLayer)

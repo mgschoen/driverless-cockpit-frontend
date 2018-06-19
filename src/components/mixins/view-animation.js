@@ -151,7 +151,7 @@ export default {
     if (this.stage !== null && this.shapeVehicle !== null) {
       let scale = this.stage.scaleX()
       let canvas = { x: this.stage.width(), y: this.stage.height() }
-      let absoluteCarpos = { x: this.shapeVehicle.x(), y: this.shapeVehicle.y() }
+      let absoluteCarpos = { x: this.shapeVehicle.x(), y: -this.shapeVehicle.y() }
       let onscreenCarpos = { x: absoluteCarpos.x * scale, y: absoluteCarpos.y * scale }
       let camTranslation = { x: this.stage.x(), y: this.stage.y() }
       let onscreenCampos = { x: -camTranslation.x, y: -camTranslation.y }
@@ -224,7 +224,7 @@ export default {
         let label = new Konva.Text({
           x: 0,
           y: y,
-          text: pixelToMeters(y).toString(),
+          text: pixelToMeters(-y).toString(),
           fontSize: 20,
           fontFamily: 'Verdana',
           fill: 'black',
