@@ -6,8 +6,6 @@
         <pre>
 timestamp: {{liveStatsFiltered.timestamp}}
 steerAngle: {{liveStatsFiltered.steerAngle}}
-pathMiddleX: {{liveStatsFiltered.pathMiddleX}}
-pathMiddleY: {{liveStatsFiltered.pathMiddleY}}
 vehicleX: {{liveStatsFiltered.vehicleX}}
 vehicleY: {{liveStatsFiltered.vehicleY}}
 vehicleVelocityX: {{liveStatsFiltered.vehicleVelocityX}}
@@ -19,20 +17,21 @@ vehicleRotation: {{liveStatsFiltered.vehicleRotation}}
         </p>
       </b-card>
     </b-col>
+    <!-- These are for debugging only -->
     <b-col md="6" lg="4">
-      <b-card title="Observations">
+      <!--b-card-- title="Base Case">
         <p class="card-text">
-        <!--pre>{{liveStatsFiltered.observations}}</pre-->
+        <pre>{{liveStatsFiltered.basecaseMiddlePoints}}</pre>
         </p>
-      </b-card>
+      </b-card-->
     </b-col>
     <b-col md="6" lg="4">
-      <b-card title="Trajectory">
+      <!--b-card title="Trajectory">
         <p class="card-text">
-          <!--pre>{{liveStatsFiltered.trajectory}}</pre-->
-        <!--pre>{{liveStatsFiltered.clusters}}</pre-->
+          <pre>{{liveStatsFiltered.trajectory}}</pre>
+          <pre>{{liveStatsFiltered.clusters}}</pre>
         </p>
-      </b-card>
+      </b-card-->
     </b-col>
   </b-row>
 </template>

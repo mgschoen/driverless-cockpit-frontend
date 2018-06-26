@@ -8,6 +8,7 @@ export default {
       : this.replay.activeFrame
     if (activeFrame) {
       this.animateVehicle(activeFrame.vehicleX, activeFrame.vehicleY)
+      this.animateBasecase(activeFrame.basecaseMiddlePoints)
       this.animateObservations(activeFrame.observations)
       this.animateClusters(activeFrame.clusters)
       this.animateTrajectory(activeFrame.trajectory, activeFrame.trajectoryHash)
@@ -46,6 +47,26 @@ export default {
         this.lastKnownVehiclePosition.y = nextVehiclePosition.y
       }
     }
+  },
+
+  animateBasecase: function (pointsList) {
+    let newPoints = []
+    for (let point of pointsList) {
+      newPoints.push(new Konva.Circle({
+        x: meterToPixels(point.x),
+        y: meterToPixels(point.y),
+        radius: meterToPixels(0.2),
+        fill: 'green'
+      }))
+    }
+    for (let oldShape of this.basecaseShapes) {
+      oldShape.destroy()
+    }
+    for (let newShape of newPoints) {
+      this.basecaseLayer.add(newShape)
+    }
+    this.basecaseShapes = newPoints
+    this.basecaseLayer.batchDraw()
   },
 
   animateObservations: function (observationsList) {

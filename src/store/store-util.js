@@ -4,9 +4,9 @@ const CONFIG = {
     refreshInterval: 500
   },
   liveStats: {
-    requiredProperties: ['timestamp', 'steerAngle', 'pathMiddleX', 'pathMiddleY', 'vehicleX',
-      'vehicleY', 'vehicleVelocityX', 'vehicleVelocityY', 'vehicleRotation', 'vehicleAccelerationX',
-      'vehicleAccelerationY', 'observations', 'clusters', 'trajectory', 'trajectoryHash', 'trajectoryPrimitives'],
+    requiredProperties: ['timestamp', 'steerAngle', 'vehicleX', 'vehicleY', 'vehicleVelocityX',
+      'vehicleVelocityY', 'vehicleRotation', 'vehicleAccelerationX', 'vehicleAccelerationY', 'observations',
+      'clusters', 'trajectory', 'trajectoryHash', 'trajectoryPrimitives', 'basecaseMiddlePoints'],
     refreshInterval: 100
   }
 }

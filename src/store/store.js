@@ -32,7 +32,8 @@ export default new Vuex.Store({
       clusters: {},
       trajectoryPrimitives: [],
       trajectoryHash: 0,
-      trajectory: []
+      trajectory: [],
+      basecaseMiddlePoints: []
     },
     replay: {
       mode: 'stopped',

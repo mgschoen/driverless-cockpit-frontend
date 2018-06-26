@@ -71,6 +71,9 @@ export default {
       vehicleLayer: null,
       shapeVehicle: null,
 
+      basecaseLayer: null,
+      basecaseShapes: [],
+
       clusterLayer: null,
       clusterShapes: {},
       clusterHashes: {},
@@ -152,11 +155,13 @@ export default {
     // create layers
     this.gridLayer = new Konva.Layer()
     this.vehicleLayer = new Konva.Layer({scaleY: -1})
+    this.basecaseLayer = new Konva.Layer({scaleY: -1})
     this.clusterLayer = new Konva.Layer({scaleY: -1})
     this.observationsLayer = new Konva.Layer({scaleY: -1})
     this.trajectoryLayer = new Konva.Layer({scaleY: -1})
     this.stage.add(this.gridLayer)
     this.stage.add(this.vehicleLayer)
+    this.stage.add(this.basecaseLayer)
     this.stage.add(this.clusterLayer)
     this.stage.add(this.observationsLayer)
     this.stage.add(this.trajectoryLayer)
@@ -219,6 +224,7 @@ export default {
     // add animations
     this.animationVehicle = new Konva.Animation(this.drive, [
       this.vehicleLayer,
+      this.basecaseLayer,
       this.clusterLayer,
       this.observationsLayer,
       this.trajectoryLayer
